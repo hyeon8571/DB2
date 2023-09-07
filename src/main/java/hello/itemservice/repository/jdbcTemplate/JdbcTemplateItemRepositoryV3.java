@@ -13,8 +13,6 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
-import org.springframework.jdbc.support.GeneratedKeyHolder;
-import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.util.StringUtils;
 
 import javax.sql.DataSource;
@@ -49,17 +47,17 @@ public class JdbcTemplateItemRepositoryV3 implements ItemRepository {
         return item;
     }
 
+
     @Override
     public void update(Long itemId, ItemUpdateDto updateParam) {
-
-        String sql = "update item set item_name=:itemName, price=:price, quantity=:quantity from item where id=:id";
-
+        String sql = "update item " +
+                "set item_name=:itemName, price=:price, quantity=:quantity " +
+                "where id=:id";
         SqlParameterSource param = new MapSqlParameterSource()
                 .addValue("itemName", updateParam.getItemName())
-                        .addValue("price", updateParam.getPrice())
-                                .addValue("quantity", updateParam.getQuantity())
-                                        .addValue("id", itemId);
-
+                .addValue("price", updateParam.getPrice())
+                .addValue("quantity", updateParam.getQuantity())
+                .addValue("id", itemId);
         template.update(sql, param);
     }
 
